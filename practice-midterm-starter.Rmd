@@ -17,9 +17,9 @@ By completing and submitting this practice midterm, I certify that:
 - I may use course materials, lecture notes, R documentation/help files, and other resources explicitly approved by the instructors.
 - I understand that I am responsible for being able to explain all code and written work that I submit.
 
-**Name:** ______________________________  
-**Signature:** ___________________________  
-**Date:** _______________________________
+**Name:** ________Mario_____  
+**Signature:** ____MH___________________  
+**Date:** ______10/28/2026____________________
 
 # Before you begin
 
@@ -41,39 +41,44 @@ library(openintro)
 **Goal:** Inspect the size and variable types of `earthquakes`.
 
 ```{r glimpse-earthquakes, eval = FALSE}
-# Your code here
+glimpse(earthquakes)
 ```
 
-> Replace this text with the number of rows and variables, and how many are categorical versus numerical.
+> 123 rows, 7 variables each
 
 ## Exercise 2 — Variable names (5 points)
 
 **Goal:** Check that column names follow good R style.
 
 ```{r names-earthquakes, eval = FALSE}
-# Your code here
+names(earthquakes)
 ```
 
-> Replace this text with two stylistic choices that mean these names accord with good R syntax.
+> The names are short and different.
 
 ## Exercise 3 — Count by region (5 points)
 
 **Goal:** Produce a sorted frequency table.
 
 ```{r count-region, eval = FALSE}
-# Your code here
+earthquakes %>%
+count(region) %>%
+  arrange(desc(n))
 ```
 
-> Replace this text with the pair of data-wrangling functions that could produce a similar output.
+``` {r}
+earthquakes %>%
+  select(region)
+```
 
 ## Exercise 4 — Bar plot of top 5 regions (5 points)
 
 **Goal:** Filter to the five most frequent regions and draw a bar chart.
 
 ```{r visualize-earthquake-regions, eval = FALSE}
-___ %>% 
-  filter(___ %in% c("___", "___", "___", "___", "___")) %>% 
-  ggplot(aes(x = ___)) +
+earthquakes %>% 
+  filter(region %in% c("Turkey", "Iran", "China", "Japan", "United States")) %>% 
+  ggplot(aes(x = region)) +
   geom_bar() +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -84,11 +89,11 @@ ___ %>%
 **Goal:** Compare magnitude distributions across the top five regions.
 
 ```{r visualize-earthquake-richter, eval = FALSE}
-___ %>% 
-  filter(___ %in% c("___", "___", "___", "___", "___")) %>% 
-  ggplot(aes(x = ___, fill = ___)) +
+earthquakes %>% 
+  filter(region %in% c("Turkey", "Iran", "China", "Japan", "United States")) %>% 
+  ggplot(aes(x = richter, fill = region)) +
   geom_histogram() +
-  facet_wrap(~ ___, ncol = 3) +
+  facet_wrap(~ region, ncol = 3) +
   theme_classic()
 ```
 
@@ -99,10 +104,19 @@ ___ %>%
 **Goal:** Build a complete-case subset and report how many rows were lost.
 
 ```{r earthquakes-subset, eval = FALSE}
-# Your code here
+earthquakes_subset <- earthquakes %>%
+  select(richter, month, year, deaths) %>%
+filter(!is.na(month)) %>%
+filter(!is.na(year)) %>%
+filter(!is.na(richter)) %>%
+filter(!is.na(deaths)) 
+
+glimpse(earthquakes_subset)
+  
+
 ```
 
-> Replace this text with how many rows were removed by dropping NAs.
+>Lost 2 rows. Went from 123 to 121.
 
 ## Exercise 7 — Re-level month and redraw the violin plot (5 points)
 
@@ -115,23 +129,23 @@ earthquakes_subset %>%
   theme_classic()
 ```
 
-> Replace this text with why `April` appears on the left instead of `January`, referencing the type/class of `month` and its two components.
+> `April` appears on the left instead of `January` beacause month is a character type. So it is alphabetized
 
 ```{r recode-month-levels, eval = FALSE}
 earthquakes_subset %>% 
-  mutate(___ = fct_relevel(___,
-                           "___",
-                           "___",
-                           "___",
-                           "___",
-                           "___",
-                           "___",
-                           "___",
-                           "___",
-                           "___",
-                           "___",
-                           "___",
-                           "___")) %>% 
+  mutate(month = fct_relevel(month,
+                           "January",
+                           "February",
+                           "March",
+                           "April",
+                           "May",
+                           "June",
+                           "July",
+                           "August",
+                           "September",
+                           "October",
+                           "November",
+                           "December")) %>%
   ggplot(aes(x = month, y = deaths)) +
   geom_violin() +
   theme_classic()
@@ -139,9 +153,9 @@ earthquakes_subset %>%
 
 # Submission checklist
 
-- [ ] I signed the academic-integrity statement.
-- [ ] My name and date are correct in the YAML.
-- [ ] I answered every requested question in complete sentences.
-- [ ] All required code is in this file.
-- [ ] This document Knits without errors.
-- [ ] I committed and pushed my final changes to GitHub.
+- [x ] I signed the academic-integrity statement.
+- [x ] My name and date are correct in the YAML.
+- [x ] I answered every requested question in complete sentences.
+- [x ] All required code is in this file.
+- [x ] This document Knits without errors.
+- [x ] I committed and pushed my final changes to GitHub.
